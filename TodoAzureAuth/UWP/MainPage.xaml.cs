@@ -10,24 +10,31 @@ namespace TodoAzure.UWP
     /// </summary>
     public sealed partial class MainPage : IAuthenticate
     {
+        // Define a authenticated user.
         MobileServiceUser user;
 
         public MainPage()
         {
             this.InitializeComponent();
+
+            // Initialize the authenticator before loading the app.
             TodoAzure.App.Init(this);
+
             this.LoadApplication(new TodoAzure.App());
         }
 
+        #region IAuthenticate
+        
         public async Task<bool> AuthenticateAsync()
         {
             bool success = false;
 
             try
             {
+                // Sign in with Twitter login using a server-managed flow.
                 if (user == null)
                 {
-                    user = await TodoItemManager.DefaultManager.CurrentClient.LoginAsync(MobileServiceAuthenticationProvider.Google, Constants.URLScheme);
+                    user = await TodoItemManager.DefaultManager.CurrentClient.LoginAsync(MobileServiceAuthenticationProvider.Twitter, Constants.URLScheme);
                     if (user != null)
                     {
                         var dialog = new MessageDialog(string.Format("You are now logged in - {0}", user.UserId), "Authentication");
@@ -66,5 +73,6 @@ namespace TodoAzure.UWP
             }
             return success;
         }
+        #endregion
     }
 }

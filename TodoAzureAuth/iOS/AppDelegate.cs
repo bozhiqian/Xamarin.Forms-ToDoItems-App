@@ -36,7 +36,7 @@ namespace TodoAzure.iOS
                 {
                     // The authentication provider could also be Facebook, Twitter, or Microsoft
                     user = await TodoItemManager.DefaultManager.CurrentClient.LoginAsync(
-                        UIApplication.SharedApplication.KeyWindow.RootViewController, MobileServiceAuthenticationProvider.Google, Constants.URLScheme);
+                        UIApplication.SharedApplication.KeyWindow.RootViewController, MobileServiceAuthenticationProvider.Twitter, Constants.URLScheme);
                     if (user != null)
                     {
                         var authAlert = UIAlertController.Create("Authentication", "You are now logged in " + user.UserId, UIAlertControllerStyle.Alert);
