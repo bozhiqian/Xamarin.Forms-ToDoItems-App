@@ -2,14 +2,19 @@
 // to all projects in the solution and uncomment the symbol definition OFFLINE_SYNC_ENABLED
 // For Xamarin.iOS, also edit AppDelegate.cs and uncomment the call to SQLitePCL.CurrentPlatform.Init()
 // For more information, see: http://go.microsoft.com/fwlink/?LinkId=620342 
-//#define OFFLINE_SYNC_ENABLED
+
+// Enable offline sync for your Xamarin.Forms mobile app
+//https://docs.microsoft.com/en-gb/azure/app-service-mobile/app-service-mobile-xamarin-forms-get-started-offline-data
+//https://docs.microsoft.com/en-gb/azure/app-service-mobile/app-service-mobile-offline-data-sync
+
+
+#define OFFLINE_SYNC_ENABLED
 
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
-using Microsoft.WindowsAzure.MobileServices.Sync;
 
 #if OFFLINE_SYNC_ENABLED
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
@@ -21,7 +26,9 @@ namespace TodoAzure
     public class TodoItemManager
     {
 #if OFFLINE_SYNC_ENABLED
-        IMobileServiceSyncTable<TodoItem> todoTable;
+
+        // The IMobileServiceSyncTable uses the local database for all create, read, update, and delete (CRUD) table operations. 
+        IMobileServiceSyncTable<TodoItem> todoTable; 
 
 #else
         private readonly IMobileServiceTable<TodoItem> todoTable;
@@ -32,19 +39,31 @@ namespace TodoAzure
             CurrentClient = new MobileServiceClient(Constants.ApplicationURL);
 
 #if OFFLINE_SYNC_ENABLED
-            var store = new MobileServiceSQLiteStore("localstore.db");
-            store.DefineTable<TodoItem>();
+            try
+            {
+                // This code creates a new local SQLite database using the MobileServiceSQLiteStore class.
+                var store = new MobileServiceSQLiteStore("localstore.db"); 
 
-            //Initializes the SyncContext using the default IMobileServiceSyncHandler.
-            this.client.SyncContext.InitializeAsync(store);
+                // The DefineTable method creates a table in the local store that matches the fields in the provided type. 
+                // The type doesn't have to include all the columns that are in the remote database. It is possible to store a subset of columns.
+                store.DefineTable<TodoItem>();
 
-            this.todoTable = client.GetSyncTable<TodoItem>();
+                //Initializes the SyncContext using the default IMobileServiceSyncHandler.
+                this.CurrentClient.SyncContext.InitializeAsync(store);
+
+                this.todoTable = CurrentClient.GetSyncTable<TodoItem>();
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(@"SQLite error: {0}", e.Message);
+            }
 #else
             todoTable = CurrentClient.GetTable<TodoItem>();
 #endif
         }
 
-        public static TodoItemManager DefaultManager { get; } = new TodoItemManager();
+        public static TodoItemManager DefaultManager => new TodoItemManager();
 
         public MobileServiceClient CurrentClient { get; }
 
@@ -87,14 +106,18 @@ namespace TodoAzure
         }
 
 #if OFFLINE_SYNC_ENABLED
+        // Sync with the Mobile App backend
         public async Task SyncAsync()
         {
             ReadOnlyCollection<MobileServiceTableOperationError> syncErrors = null;
 
             try
             {
-                await this.client.SyncContext.PushAsync();
+                // Push changes from local todoTable to the Mobile App backend by calling PushAsync on the IMobileServiceSyncContext
+                // The sync context helps preserve table relationships by tracking and pushing changes in all tables a client app has modified when PushAsync is called.
+                await this.CurrentClient.SyncContext.PushAsync(); // from local SQLite to remote backend easy table with Azure Mobile App.
 
+                // Pull change from backend to local SQLite. 
                 await this.todoTable.PullAsync(
                     //The first parameter is a query name that is used internally by the client SDK to implement incremental sync.
                     //Use a different query name for each unique query in your program

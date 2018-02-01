@@ -15,6 +15,7 @@ namespace TodoAzure.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+
             Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init();
 
             App.Init(this); // This code ensures the authenticator is initialized before the app is loaded.

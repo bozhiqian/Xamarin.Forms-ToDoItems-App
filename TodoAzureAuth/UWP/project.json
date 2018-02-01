@@ -1,6 +1,8 @@
 ﻿{
   "dependencies": {
     "Microsoft.Azure.Mobile.Client": "4.0.2",
+    "Microsoft.Azure.Mobile.Client.SQLiteStore": "4.0.2",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "6.0.6",
     "Newtonsoft.Json": "10.0.3",
     "Xamarin.Forms": "2.5.0.122203"
   },
