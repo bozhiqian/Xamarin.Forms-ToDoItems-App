@@ -10,7 +10,8 @@ This is updated version of original version from [TodoAzureAuth](https://develop
 2. [Add authentication to your Xamarin Forms app](https://docs.microsoft.com/en-gb/azure/app-service-mobile/app-service-mobile-xamarin-forms-get-started-users) 
 3. [Enable offline sync for your Xamarin.Forms mobile app](https://docs.microsoft.com/en-gb/azure/app-service-mobile/app-service-mobile-xamarin-forms-get-started-offline-data) 
 
-
+## Screenshots
+![](Art/apps.png)
 
 ### Here are more references. ###
 
