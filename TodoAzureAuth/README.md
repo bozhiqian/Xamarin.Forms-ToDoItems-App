@@ -1,7 +1,7 @@
 # TodoAzureAuth #
 
 
-This is updated version of original version from [TodoAzureAuth](https://developer.xamarin.com/samples/xamarin-forms/WebServices/TodoAzureAuth/). The reason that I did not create fork version from [TodoAzureAuth Code](https://github.com/xamarin/xamarin-forms-samples/tree/master/WebServices/TodoAzureAuth) is I was not able to solve a lot of nuget packages updates from there. 
+This is updated version of original version from [TodoAzureAuth](https://developer.xamarin.com/samples/xamarin-forms/WebServices/TodoAzureAuth/). The reason that I did not create fork version from [TodoAzureAuth Code](https://github.com/xamarin/xamarin-forms-samples/tree/master/WebServices/TodoAzureAuth) is I was not able to solve a lot of issues from nuget packages updates. 
 
 
 ### Steps: ###
@@ -17,3 +17,6 @@ This is updated version of original version from [TodoAzureAuth](https://develop
 
 - [Authenticating Users with Azure Mobile Apps](https://developer.xamarin.com/guides/xamarin-forms/cloud-services/authentication/azure/) 
 - [TodoAzureAuthOfflineSync](https://github.com/xamarin/xamarin-forms-samples/tree/master/WebServices/TodoAzureAuthOfflineSync)
+
+#### Contributors
+* [Bozhi Qian](https://github.com/bozhiqian)
