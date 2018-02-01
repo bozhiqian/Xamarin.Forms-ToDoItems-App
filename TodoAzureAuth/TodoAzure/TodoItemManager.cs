@@ -25,13 +25,16 @@ namespace TodoAzure
 {
     public class TodoItemManager
     {
+        private static TodoItemManager _defaultInstance;
+
 #if OFFLINE_SYNC_ENABLED
 
         // The IMobileServiceSyncTable uses the local database for all create, read, update, and delete (CRUD) table operations. 
         IMobileServiceSyncTable<TodoItem> todoTable;
-
+        private static bool _offlineSyncEnabled = true;
 #else
         private readonly IMobileServiceTable<TodoItem> todoTable;
+        private static bool _offlineSyncEnabled = false;
 #endif
 
         private TodoItemManager()
@@ -55,11 +58,11 @@ namespace TodoAzure
 #endif
         }
 
-        public static TodoItemManager DefaultManager => new TodoItemManager();
+        public static TodoItemManager DefaultManager => _defaultInstance ?? (_defaultInstance = new TodoItemManager());
 
         public MobileServiceClient CurrentClient { get; }
 
-        public bool IsOfflineEnabled => todoTable is IMobileServiceSyncTable<TodoItem>;
+        public bool IsOfflineEnabled => _offlineSyncEnabled;
 
         public async Task<ObservableCollection<TodoItem>> GetTodoItemsAsync(bool syncItems = false)
         {
