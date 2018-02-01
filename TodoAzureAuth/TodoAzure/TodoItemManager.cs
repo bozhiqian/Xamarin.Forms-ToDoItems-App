@@ -28,7 +28,7 @@ namespace TodoAzure
 #if OFFLINE_SYNC_ENABLED
 
         // The IMobileServiceSyncTable uses the local database for all create, read, update, and delete (CRUD) table operations. 
-        IMobileServiceSyncTable<TodoItem> todoTable; 
+        IMobileServiceSyncTable<TodoItem> todoTable;
 
 #else
         private readonly IMobileServiceTable<TodoItem> todoTable;
@@ -39,25 +39,17 @@ namespace TodoAzure
             CurrentClient = new MobileServiceClient(Constants.ApplicationURL);
 
 #if OFFLINE_SYNC_ENABLED
-            try
-            {
-                // This code creates a new local SQLite database using the MobileServiceSQLiteStore class.
-                var store = new MobileServiceSQLiteStore("localstore.db"); 
+            // This code creates a new local SQLite database using the MobileServiceSQLiteStore class.
+            var store = new MobileServiceSQLiteStore("localstore.db");
 
-                // The DefineTable method creates a table in the local store that matches the fields in the provided type. 
-                // The type doesn't have to include all the columns that are in the remote database. It is possible to store a subset of columns.
-                store.DefineTable<TodoItem>();
+            // The DefineTable method creates a table in the local store that matches the fields in the provided type. 
+            // The type doesn't have to include all the columns that are in the remote database. It is possible to store a subset of columns.
+            store.DefineTable<TodoItem>();
 
-                //Initializes the SyncContext using the default IMobileServiceSyncHandler.
-                this.CurrentClient.SyncContext.InitializeAsync(store);
+            //Initializes the SyncContext using the default IMobileServiceSyncHandler.
+            this.CurrentClient.SyncContext.InitializeAsync(store);
 
-                this.todoTable = CurrentClient.GetSyncTable<TodoItem>();
-
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(@"SQLite error: {0}", e.Message);
-            }
+            this.todoTable = CurrentClient.GetSyncTable<TodoItem>();
 #else
             todoTable = CurrentClient.GetTable<TodoItem>();
 #endif

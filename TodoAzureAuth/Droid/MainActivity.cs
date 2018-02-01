@@ -41,6 +41,7 @@ namespace TodoAzure.Droid
                 {
                     // The authentication provider could also be Facebook, Twitter, or Microsoft
                     var todoItemManager = TodoItemManager.DefaultManager;
+
                     _user = await todoItemManager.CurrentClient.LoginAsync(this, MobileServiceAuthenticationProvider.Twitter, Constants.URLScheme);
                     if (_user != null)
                     {
